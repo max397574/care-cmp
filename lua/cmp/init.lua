@@ -1,6 +1,6 @@
-local neocomplete_cmp = {}
+local care_cmp = {}
 
-function neocomplete_cmp.register_source(name, cmp_source)
+function care_cmp.register_source(name, cmp_source)
     cmp_source.name = "cmp-" .. name
     if not cmp_source.is_available then
         cmp_source.is_available = function()
@@ -45,11 +45,11 @@ function neocomplete_cmp.register_source(name, cmp_source)
             callback(response.items or response)
         end)
     end
-    require("neocomplete.sources").register_source(vim.deepcopy(cmp_source))
+    require("care.sources").register_source(vim.deepcopy(cmp_source))
 end
 
-neocomplete_cmp.lsp = {}
-neocomplete_cmp.lsp.CompletionItemKind = {
+care_cmp.lsp = {}
+care_cmp.lsp.CompletionItemKind = {
     Text = 1,
     Method = 2,
     Function = 3,
@@ -77,4 +77,6 @@ neocomplete_cmp.lsp.CompletionItemKind = {
     TypeParameter = 25,
 }
 
-return neocomplete_cmp
+care_cmp.lsp.MarkupKind = { PlainText = "plaintext", Markdown = "markdown" }
+
+return care_cmp
