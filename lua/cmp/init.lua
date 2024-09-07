@@ -26,6 +26,9 @@ function care_cmp.register_source(name, cmp_source)
                 line = cursor[1] - 1,
                 character = cursor[2] - 1,
             },
+            get_reason = function(self)
+                return self.option.reason
+            end,
             cursor_before_line = string.sub(cursor_line, 1, cursor[2] - 2),
             cursor_after_line = string.sub(cursor_line, cursor[2] - 1),
         }
