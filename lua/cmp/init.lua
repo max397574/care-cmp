@@ -91,4 +91,11 @@ care_cmp.lsp.CompletionItemKind = {
 
 care_cmp.lsp.MarkupKind = { PlainText = "plaintext", Markdown = "markdown" }
 
+care_cmp.ContextReason = {
+    Auto = "auto",
+    Manual = "manual",
+    TriggerOnly = "triggerOnly",
+    None = "none",
+}
+
 return care_cmp
