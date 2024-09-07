@@ -1,7 +1,8 @@
 local care_cmp = {}
 
 function care_cmp.register_source(name, cmp_source)
-    cmp_source.name = "cmp-" .. name
+    cmp_source.name = "cmp_" .. name
+    cmp_source.display_name = name .. " (cmp)"
     if not cmp_source.is_available then
         cmp_source.is_available = function()
             return true
@@ -13,8 +14,10 @@ function care_cmp.register_source(name, cmp_source)
         local cursor_line = vim.api.nvim_get_current_line()
         local cmp_context = {
             option = { reason = completion_context.completion_context.triggerKind == 1 and "manual" or "auto" },
-            filetype = vim.api.nvim_buf_get_option(0, "filetype"),
-            time = vim.loop.now(),
+            filetype = vim.api.nvim_get_option_value("filetype", {
+                buf = 0,
+            }),
+            time = vim.uv.now(),
             bufnr = vim.api.nvim_get_current_buf(),
             cursor_line = cursor_line,
             cursor = {
@@ -44,6 +47,12 @@ function care_cmp.register_source(name, cmp_source)
             end
             callback(response.items or response)
         end)
+    end
+    local old_execute = cmp_source.execute
+    if old_execute then
+        cmp_source.execute = function(self, entry)
+            old_execute(self, entry.completion_item, function() end)
+        end
     end
     require("care.sources").register_source(vim.deepcopy(cmp_source))
 end
