@@ -51,6 +51,12 @@ function care_cmp.register_source(name, cmp_source)
             callback(response.items or response)
         end)
     end
+    local old_get_keyword_pattern = cmp_source.get_keyword_pattern
+    if old_get_keyword_pattern then
+        cmp_source.get_keyword_pattern = function(self)
+            return old_get_keyword_pattern(self, { option = {} })
+        end
+    end
     local old_execute = cmp_source.execute
     if old_execute then
         cmp_source.execute = function(self, entry)
