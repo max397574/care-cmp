@@ -51,12 +51,6 @@ function care_cmp.register_source(name, cmp_source)
             callback(response.items or response)
         end)
     end
-    local old_is_available = cmp_source.is_available
-    if old_is_available then
-        cmp_source.is_available = function(self)
-            old_is_available(self)
-        end
-    end
     local old_get_keyword_pattern = cmp_source.get_keyword_pattern
     if old_get_keyword_pattern then
         cmp_source.get_keyword_pattern = function(self)
