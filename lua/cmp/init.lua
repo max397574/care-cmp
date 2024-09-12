@@ -1,5 +1,6 @@
 local care_cmp = {}
 
+---@param cmp_source care.source
 function care_cmp.register_source(name, cmp_source)
     cmp_source.name = "cmp_" .. name
     cmp_source.display_name = name .. " (cmp)"
@@ -10,16 +11,16 @@ function care_cmp.register_source(name, cmp_source)
     end
     local old_complete = cmp_source.complete
     cmp_source.complete = function(completion_context, callback)
-        local cursor = vim.api.nvim_win_get_cursor(0)
-        local cursor_line = vim.api.nvim_get_current_line()
+        local cursor = { completion_context.context.cursor.row, completion_context.context.cursor.col }
+        local cursor_line = completion_context.context.line
         local cmp_context = {
             option = { reason = completion_context.completion_context.triggerKind == 1 and "manual" or "auto" },
             filetype = vim.api.nvim_get_option_value("filetype", {
                 buf = 0,
             }),
             time = vim.uv.now(),
-            bufnr = vim.api.nvim_get_current_buf(),
-            cursor_line = cursor_line,
+            bufnr = completion_context.context.bufnr,
+            cursor_line = completion_context.context.line,
             cursor = {
                 row = cursor[1],
                 col = cursor[2] - 1,
@@ -29,7 +30,7 @@ function care_cmp.register_source(name, cmp_source)
             get_reason = function(self)
                 return self.option.reason
             end,
-            cursor_before_line = string.sub(cursor_line, 1, cursor[2] - 2),
+            cursor_before_line = completion_context.context.line_before_cursor,
             cursor_after_line = string.sub(cursor_line, cursor[2] - 1),
         }
         local TODO = 3
