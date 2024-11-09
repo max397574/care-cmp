@@ -64,6 +64,12 @@ function care_cmp.register_source(name, cmp_source)
             old_execute(self, entry.completion_item, function() end)
         end
     end
+    local old_resolve = cmp_source.resolve
+    if old_resolve then
+        cmp_source.resolve_item = function(self, completion_item, callback)
+            old_resolve(self, completion_item, callback)
+        end
+    end
     require("care.sources").register_source(vim.deepcopy(cmp_source))
 end
 
